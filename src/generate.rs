@@ -2,7 +2,6 @@
 
 use binary_install::Download;
 use child;
-use emoji;
 use failure::{self, ResultExt};
 use std::process::Command;
 
@@ -16,8 +15,7 @@ pub fn generate(template: &str, name: &str, download: &Download) -> Result<(), f
     cmd.arg("--name").arg(&name);
 
     println!(
-        "{} Generating a new rustwasm project with name '{}'...",
-        emoji::SHEEP,
+        "Generating a new rustwasm project with name '{}'...",
         name
     );
     child::run(cmd, "cargo-generate").context("Running cargo-generate")?;

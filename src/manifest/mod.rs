@@ -558,12 +558,12 @@ impl CrateData {
         let name_prefix = self.name_prefix();
         let wasm_file = format!("{}_bg.wasm", name_prefix);
         let js_file = format!("{}.js", name_prefix);
-        let mut files = vec![wasm_file];
+        let mut _files = vec![wasm_file];
 
-        files.push(js_file.clone());
+        _files.push(js_file.clone());
         if include_commonjs_shim {
             let js_bg_file = format!("{}_bg.js", name_prefix);
-            files.push(js_bg_file.to_string());
+            _files.push(js_bg_file.to_string());
         }
 
         let pkg = &self.data.packages[self.current_idx];
@@ -574,7 +574,7 @@ impl CrateData {
 
         let dts_file = if !disable_dts {
             let file = format!("{}.d.ts", name_prefix);
-            files.push(file.to_string());
+            _files.push(file.to_string());
             Some(file)
         } else {
             None
@@ -588,14 +588,14 @@ impl CrateData {
                 .filter(|f| f.starts_with("LICENSE"))
                 .filter(|f| f != "LICENSE");
             for file_name in file_names {
-                files.push(file_name);
+                _files.push(file_name);
             }
         }
 
         NpmData {
             name: npm_name,
             dts_file,
-            files,
+            files: vec!["*".to_owned()],
             main: js_file,
             homepage: self.manifest.package.homepage.clone(),
         }

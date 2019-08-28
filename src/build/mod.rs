@@ -2,7 +2,6 @@
 
 use child;
 use command::build::BuildProfile;
-use emoji;
 use failure::{Error, ResultExt};
 use manifest::Crate;
 use std::path::Path;
@@ -83,7 +82,7 @@ pub fn cargo_build_wasm(
     profile: BuildProfile,
     extra_options: &[String],
 ) -> Result<(), Error> {
-    let msg = format!("{}Compiling to Wasm...", emoji::CYCLONE);
+    let msg = format!("Compiling to Wasm...");
     PBAR.info(&msg);
     let mut cmd = Command::new("cargo");
     cmd.current_dir(path).arg("build").arg("--lib");

@@ -1,7 +1,6 @@
 //! Checking for the wasm32 target
 
 use child;
-use emoji;
 use failure::{Error, ResultExt};
 use log::info;
 use std::fmt;
@@ -53,7 +52,7 @@ impl fmt::Display for Wasm32Check {
 /// Ensure that `rustup` has the `wasm32-unknown-unknown` target installed for
 /// current toolchain
 pub fn check_for_wasm32_target() -> Result<(), Error> {
-    let msg = format!("{}Checking for the Wasm target...", emoji::TARGET);
+    let msg = format!("Checking for the Wasm target...");
     PBAR.info(&msg);
 
     // Check if wasm32 target is present, otherwise bail.

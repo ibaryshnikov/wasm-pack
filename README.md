@@ -1,3 +1,36 @@
+## Fork of a wasm-pack
+## Disclaimer: don't use it, use the https://github.com/rustwasm/wasm-pack instead
+### Goals
+The main goal is to fix some problems of wasm-pack which
+have been stale for a long time and provide a temporary solution.
+Some changes are not likely to be implemented in wasm-pack at all,
+because they are either breaking changes or deviate from the project's direction.
+### Differences from original
+- no emoji by default
+- dev build by default
+- no .gitignore inside pkg
+- field `files` inside `package.json` is always `*`
+- out_name is `index` by default
+### Benefits
+- works better in terminals without emoji support
+- consistent with cargo using dev build by default
+- supports js snippets
+- no need to manually delete `.gitignore` from inside `pkg` when committing `pkg`
+- can use the same import boilerplate when do a lot of prototyping using `--target web`
+
+Here's a more detailed explanation of the last point
+```js
+// in one project you can do this
+import init from 'pkg/first_project.js';
+
+// in another project
+import init from 'pkg/second_project.js';
+
+// and so on. instead, it's possible to
+import init from 'pkg/index.js';
+// and copy-paste more code between experimental projects
+```
+
 <div align="center">
 
   <h1>📦✨  wasm-pack</h1>

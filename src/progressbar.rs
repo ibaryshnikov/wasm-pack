@@ -1,7 +1,6 @@
 //! Fancy progress bar functionality.
 
 use console::style;
-use emoji;
 
 /// Synchronized progress bar and status message printing.
 pub struct ProgressOutput;
@@ -21,8 +20,7 @@ impl ProgressOutput {
     /// Add a warning message.
     pub fn warn(&self, message: &str) {
         let warn = format!(
-            "{} {}: {}",
-            emoji::WARN,
+            "{}: {}",
             style("[WARN]").bold().dim(),
             message
         );
@@ -32,8 +30,7 @@ impl ProgressOutput {
     /// Add an error message.
     pub fn error(&self, message: &str) {
         let err = format!(
-            "{} {}: {}",
-            emoji::ERROR,
+            "{}: {}",
             style("[ERR]").bold().dim(),
             message
         );

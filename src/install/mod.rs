@@ -3,7 +3,6 @@
 use self::krate::Krate;
 use binary_install::{Cache, Download};
 use child;
-use emoji;
 use failure::{self, ResultExt};
 use log::debug;
 use log::{info, warn};
@@ -45,7 +44,7 @@ pub fn download_prebuilt_or_cargo_install(
         }
     }
 
-    let msg = format!("{}Installing {}...", emoji::DOWN_ARROW, tool);
+    let msg = format!("Installing {}...", tool);
     PBAR.info(&msg);
 
     let dl = download_prebuilt(&tool, &cache, version, install_permitted);

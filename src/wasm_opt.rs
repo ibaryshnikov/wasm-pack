@@ -1,7 +1,6 @@
 //! Support for downloading and executing `wasm-opt`
 
 use crate::child;
-use crate::emoji;
 use crate::target;
 use crate::PBAR;
 use binary_install::Cache;
@@ -94,7 +93,7 @@ pub fn find_wasm_opt(cache: &Cache, install_permitted: bool) -> Result<WasmOpt, 
         Some(dl) => dl,
         None if !install_permitted => return Ok(WasmOpt::CannotInstall),
         None => {
-            let msg = format!("{}Installing wasm-opt...", emoji::DOWN_ARROW);
+            let msg = format!("Installing wasm-opt...");
             PBAR.info(&msg);
 
             match download(install_permitted)? {

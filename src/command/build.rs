@@ -6,7 +6,6 @@ use bindgen;
 use build;
 use cache;
 use command::utils::{create_pkg_dir, get_crate_path};
-use emoji;
 use failure::Error;
 use install::{self, InstallMode, Tool};
 use license;
@@ -144,9 +143,9 @@ pub struct BuildOptions {
     /// Sets the output directory with a relative path.
     pub out_dir: String,
 
-    #[structopt(long = "out-name")]
+    #[structopt(long = "out-name", default_value = "index")]
     /// Sets the output file names. Defaults to package name.
-    pub out_name: Option<String>,
+    pub out_name: String,
 
     #[structopt(last = true)]
     /// List of extra options to pass to `cargo build`
@@ -166,7 +165,7 @@ impl Default for BuildOptions {
             release: false,
             profiling: false,
             out_dir: String::new(),
-            out_name: None,
+            out_name: String::new(),
             extra_options: Vec::new(),
         }
     }
@@ -178,13 +177,13 @@ impl Build {
     /// Construct a build command from the given options.
     pub fn try_from_opts(build_opts: BuildOptions) -> Result<Self, Error> {
         let crate_path = get_crate_path(build_opts.path)?;
-        let crate_data = manifest::CrateData::new(&crate_path, build_opts.out_name.clone())?;
+        let crate_data = manifest::CrateData::new(&crate_path, Some(build_opts.out_name.clone()))?;
         let out_dir = crate_path.join(PathBuf::from(build_opts.out_dir));
 
         let dev = build_opts.dev || build_opts.debug;
         let profile = match (dev, build_opts.release, build_opts.profiling) {
-            (false, false, false) | (false, true, false) => BuildProfile::Release,
-            (true, false, false) => BuildProfile::Dev,
+            (false, true, false) => BuildProfile::Release,
+            (false, false, false) | (true, false, false) => BuildProfile::Dev,
             (false, false, true) => BuildProfile::Profiling,
             // Unfortunately, `structopt` doesn't expose clap's `conflicts_with`
             // functionality yet, so we have to implement it ourselves.
@@ -200,7 +199,7 @@ impl Build {
             profile,
             mode: build_opts.mode,
             out_dir,
-            out_name: build_opts.out_name,
+            out_name: Some(build_opts.out_name),
             bindgen: None,
             cache: cache::get_wasm_pack_cache()?,
             extra_options: build_opts.extra_options,
@@ -229,11 +228,10 @@ impl Build {
             self.out_dir.display()
         );
 
-        PBAR.info(&format!("{} Done in {}", emoji::SPARKLE, &duration));
+        PBAR.info(&format!("Done in {}", &duration));
 
         PBAR.info(&format!(
-            "{} Your wasm pkg is ready to publish at {}.",
-            emoji::PACKAGE,
+            "Your wasm pkg is ready to publish at {}.",
             self.out_dir.display()
         ));
         Ok(())
